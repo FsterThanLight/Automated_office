@@ -317,3 +317,11 @@ def fill_info_pavement(value_total,pavement_long_total,value_1,value_2,sht_2,pav
     sht_2.range('f17').value=round(value_2,2)
     sht_2.range('c17').value=round(pavement_long_1,2)
     sht_2.range('e17').value=round(pavement_long_2,2)
+
+def read_cells(cells):
+    '''读取连续单元格中的数据并存储到列表中'''
+    list_name=[]
+    for x in cells:
+        for i in x:
+            list_name.append(i.value)
+    return list_name

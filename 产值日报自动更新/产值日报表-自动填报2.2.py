@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QApplication,QMainWindow,QMessageBox,QFileDialog
 from PyQt5.QtCore import QDate
 from functions import *
 from return_specific_terms_daily import *
+import openpyxl
 import sys
 from auto_fill import Ui_MainWindow
 cursor=''
@@ -25,6 +26,7 @@ class Sy(QMainWindow,Ui_MainWindow):
         self.button2.setEnabled(False)
         self.progressBar.setValue(0)
         self.button1.setEnabled(False)
+        self.button3.setEnabled(False)
 
 def open_file(sy):
     global wb_1,excel_app
@@ -285,6 +287,46 @@ def main_2(cursor,sht_2,date,sy):
     sy.progressBar.setValue(100)
     # x=input('日报已更新,请查收。')
     QMessageBox.about(sy,'提示','日报已更新,请查收。')
+    sy.button2.setEnabled(False)
+    sy.button3.setEnabled(True)
+
+def main_3(date,sy):
+    '''更新浇筑安装台账'''
+    try:
+        wb_2=openpyxl.load_workbook('浇筑安装台账.xlsx',data_only=True)
+        #获取位置信息
+        list_location=read_cells(wb_2['位置信息']['b1:b17'])
+        #连接数据库,找出指定日期的梁片信息
+        cursor=accdb(list_location[0].replace('"',''))
+        date = sy.date.date().toString('yyyy/M/d')
+        cursor.execute("select * from 梁片信息简单查询 where 浇筑日期=#"+date+"#;")
+        list_target_data=cursor.fetchall()
+
+        #获取最大行数，并将新的浇筑梁片填入报表
+        max_row=wb_2['浇筑安装总台账'].max_row
+        sht_target=wb_2['浇筑安装总台账']
+        print(max_row)
+        for i in range(len(list_target_data)):
+            for j in range(len(list_target_data[i])):
+                sht_target.cell(row=max_row+i+1,column=ord(list_location[j+1])-64,value=list_target_data[i][j])
+
+        #更新安装日期、产值
+        cursor.execute("select 梁片编码,安装日期,安装产值 from 梁片信息简单查询 where 安装日期=#"+date+"#;")
+        list_ins=cursor.fetchall()
+        cursor.close()
+        list_order_ins=read_cells(sht_target[str(list_location[-1])+'1:'+list_location[-1]+str(max_row)])
+        list_number=[]
+        for i in range(len(list_ins)):
+            '''返回目标安装编号行号，根据行号更新数据'''
+            x=list_order_ins.index(list_ins[i][0])+1
+            list_number.append(x)
+            sht_target.cell(row=x,column=ord(list_location[9])-64,value=list_ins[i][1])
+            sht_target.cell(row=x,column=ord(list_location[10])-64,value=list_ins[i][2])
+        wb_2.save('浇筑安装台账.xlsx')
+        QMessageBox.about(sy, '提示', '浇筑安装台账已更新,请查收。')
+
+    except FileNotFoundError:
+        sy.state.setText('未找到“浇筑安装台账.xlsx”!')
 
 
 if __name__=='__main__':
@@ -296,4 +338,5 @@ if __name__=='__main__':
     sy.actionDaily_report.triggered.connect(lambda:open_file(sy))
     sy.button1.clicked.connect(lambda:main(sy))
     sy.button2.clicked.connect(lambda:main_2(cursor,sht_2,date,sy))
+    sy.button3.clicked.connect(lambda:main_3(date,sy))
     sys.exit(app.exec_())

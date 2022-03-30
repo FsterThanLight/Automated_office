@@ -228,7 +228,14 @@
             <item>
              <widget class="QPushButton" name="button2">
               <property name="text">
-               <string>生成报表</string>
+               <string>生成产值日报表</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="button3">
+              <property name="text">
+               <string>更新浇筑安装台账</string>
               </property>
              </widget>
             </item>
@@ -496,7 +503,7 @@
         <item>
          <widget class="QLabel" name="label_8">
           <property name="text">
-           <string>版本：2.1</string>
+           <string>版本：2.3</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
