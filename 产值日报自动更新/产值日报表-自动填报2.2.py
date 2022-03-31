@@ -312,17 +312,23 @@ def main_3(date, sy):
         # 获取最大行数，并将新的浇筑梁片填入报表
         max_row = wb_2['浇筑安装总台账'].max_row
         sht_target = wb_2['浇筑安装总台账']
-        alignment_center = Alignment(horizontal='center', vertical='center')
         print(max_row)
+        #读取表格中所有的梁片编码
+        list_order_all = read_cells(sht_target[str(list_location[-1]) + '1:' + list_location[-1] + str(max_row)])
+        alignment_center = Alignment(horizontal='center', vertical='center')
+
         for i in range(len(list_target_data)):
-            for j in range(len(list_target_data[i])):
-                if j != 6:
-                    sht_target.cell(row=max_row + i + 1, column=ord(list_location[j + 1]) - 64,
-                                    value=list_target_data[i][j])
-                elif j == 6:
-                    x = list_target_data[i][j].strftime('%Y/%#m/%#d')
-                    sht_target.cell(row=max_row + i + 1, column=ord(list_location[j + 1]) - 64,
-                                    value=x).alignment = alignment_center
+            if int(list_target_data[i][-1]) in list_order_all:
+                pass
+            else:
+                for j in range(len(list_target_data[i])):
+                    if j != 6:
+                        sht_target.cell(row=max_row + i + 1, column=ord(list_location[j + 1]) - 64,
+                                        value=list_target_data[i][j])
+                    elif j == 6:
+                        x = list_target_data[i][j].strftime('%Y/%#m/%#d')
+                        sht_target.cell(row=max_row + i + 1, column=ord(list_location[j + 1]) - 64,
+                                        value=x).alignment = alignment_center
 
         # 更新安装日期、产值
         cursor.execute("select 梁片编码,安装日期,安装产值 from 梁片信息简单查询 where 安装日期=#" + date + "#;")
