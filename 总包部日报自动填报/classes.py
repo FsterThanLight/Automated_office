@@ -48,9 +48,9 @@ class Setting():
         self.place_text_3=[10,[25,118,211,302,368],85,6]
 
 
-        self.place_button=[[self.place_frame_2[0]+120,self.place_frame_2[0]+120,self.place_frame_2[0]-10-10],\
+        self.place_button=[[self.place_frame_2[0]+120,self.place_frame_2[0]+120,self.place_frame_2[0]-10-10,self.place_frame_2[0]-10-10],\
             [self.place_frame_2[1]+10+self.place_frame_2[3],\
-            self.place_frame_2[1]+10+self.place_frame_2[3]+10+51.25,self.place_frame_2[1]+10+self.place_frame_2[3]],15,3]
+            self.place_frame_2[1]+10+self.place_frame_2[3]+10+51.25,self.place_frame_2[1]+10+self.place_frame_2[3],self.place_frame_2[1]+10+self.place_frame_2[3]+10+51.25],15,3]
         
         self.place_date_label=[50,290,70,30]
         self.place_date_enter=[self.place_date_label[0]+70,\
