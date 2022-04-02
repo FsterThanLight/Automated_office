@@ -87,23 +87,23 @@ def go_to_next_enter(te_1, la_2, te_3, da, sheet):
     for i in range(12):
         # print(i)
         te_1[i].bind("<Return>", lambda e, e2=te_1[i + 1], sheet=sheet, te_1=te_1, \
-                                        la_2=la_2, order=i, row=data_rows[i]: \
-            focus_text(e, e2, sheet, te_1, la_2, order, row, 2))
-    te_1[11].bind("<Return>", lambda e, e2=la_2[-1], sheet=sheet, te_1=te_1, \
-                                     la_2=la_2, order=11, row=data_rows[11]: \
+        la_2=la_2, order=i, row=data_rows[i]: \
         focus_text(e, e2, sheet, te_1, la_2, order, row, 2))
-    la_2[-1].bind("<Return>", lambda e, e2=te_3[0], sheet=sheet, te_1=te_1, \
-                                     la_2=la_2, order=12, row=data_rows[12]: \
+        te_1[11].bind("<Return>", lambda e, e2=la_2[-1], sheet=sheet, te_1=te_1, \
+        la_2=la_2, order=11, row=data_rows[11]: \
+        focus_text(e, e2, sheet, te_1, la_2, order, row, 2))
+        la_2[-1].bind("<Return>", lambda e, e2=te_3[0], sheet=sheet, te_1=te_1, \
+        la_2=la_2, order=12, row=data_rows[12]: \
         focus_text(e, e2, sheet, te_1, la_2, order, row, 1))
 
     for i in range(10):
         te_3[i].bind("<Return>", lambda e, e2=te_3[i + 1], te_3=te_3, order=i: \
-            focus_critical_quantity(e, e2, te_3, order))
-    te_3[10].bind("<Return>", lambda e, e2=te_1[0], te_3=te_3, order=10: \
+        focus_critical_quantity(e, e2, te_3, order))
+        te_3[10].bind("<Return>", lambda e, e2=te_1[0], te_3=te_3, order=10: \
         focus_critical_quantity(e, e2, te_3, order))
 
-    da.bind("<Return>", lambda e, e2=te_1[0], \
-                               date=da, sheet=sheet: focus_date(e, e2, date, sheet))
+        da.bind("<Return>", lambda e, e2=te_1[0], \
+        date=da, sheet=sheet: focus_date(e, e2, date, sheet))
 
 
 def date_today():
@@ -129,6 +129,15 @@ def open_xlsx(wb_name, sht_name):
     try:
         wb = app.books.open(wb_name)
         sht = wb.sheets(sht_name)
+    except FileNotFoundError:
+        y = input('找不到日报辅助用表。')
+    return wb, sht
+
+def open_xlsx_order(wb_name, order):
+    '''打开指定工作簿获取工作表，按照表序号'''
+    try:
+        wb = app.books.open(wb_name)
+        sht = wb.sheets[order]
     except FileNotFoundError:
         y = input('找不到日报辅助用表。')
     return wb, sht

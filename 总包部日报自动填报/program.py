@@ -7,6 +7,7 @@ from gui2 import *
 import datetime
 import re
 import os
+from tkinter.filedialog import *
 from functions import total_number, completed_today, critical_quantity, y
 
 daily_production_value_report = []
@@ -132,6 +133,51 @@ def rrr(number):
             label_results[i].delete(0, END)
             label_results[i].insert(0, '0.0')
         label_results[-1].focus()
+
+    elif number==4:
+        #打开选择对话框，返回目标文件的路径及文件名
+        filepath = askopenfilename()
+        #打开监理日报表
+        wb_supervision,sht_s=open_xlsx_order(filepath,0)
+        #提取监理报表中的数据
+        list_supervision=[]
+        list_supervision.append(sht_s.range('g4').value)  # 挖方
+        list_supervision.append(sht_s.range('g5').value)  # 填方
+        list_supervision.append(sht_s.range('g12').value)  # 桩基
+        list_supervision.append(sht_s.range('g13').value)  # 墩柱
+        list_supervision.append(sht_s.range('g14').value)  # 盖梁
+        def excavation(row):
+            list_1=[]
+            for i in range(4):
+                list_1.append(sht_s.range('g'+str(row+i)).value)
+            list_supervision.append(sum(list_1))
+            list_1.clear()
+        excavation(20)#开挖
+        excavation(24)#仰拱
+        excavation(28)#二衬
+        excavation(32)#电缆沟
+        excavation(36)#路面
+        list_supervision.append(sht_s.range('g40').value)#排水沟
+
+        data_rows = [2, 4, 10, 12, 14, 18, 20, 22]
+        list_number=[0,1,4,5,6,8,9,10]
+        y = date_deffrent(date_enter, sheet) + 2
+        for i in range(len(data_rows)):
+            #将数据填入GUI界面和辅助用表
+            text_results[list_number[i]].delete(0, END)
+            text_results[list_number[i]].insert(0, list_supervision[i])
+            sheet.range(data_rows[i], int(y)).value = list_supervision[i]
+            label_results[list_number[i]].delete(0, END)
+            xx=sheet.range(data_rows[i]+1, int(y)).value
+            label_results[list_number[i]].insert(0, str(round(xx,2)))
+
+
+
+
+
+
+
+
 
 
 button_1_2 = commond(root, setting)
