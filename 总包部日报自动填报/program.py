@@ -9,7 +9,7 @@ import re
 import os
 from tkinter.filedialog import *
 from functions import total_number, completed_today, critical_quantity, y
-
+list_s_d=[0,0,0]
 daily_production_value_report = []
 
 path = os.path.abspath('..')
@@ -135,6 +135,7 @@ def rrr(number):
         label_results[-1].focus()
 
     elif number==4:
+        global list_s_d
         #打开选择对话框，返回目标文件的路径及文件名
         filepath = askopenfilename()
         #打开监理日报表
@@ -170,22 +171,14 @@ def rrr(number):
             label_results[list_number[i]].delete(0, END)
             xx=sheet.range(data_rows[i]+1, int(y)).value
             label_results[list_number[i]].insert(0, str(round(xx,2)))
-
-
-
-
-
-
-
-
-
+        list_s_d=list_supervision[-3:]
 
 button_1_2 = commond(root, setting)
 
 
 def output_term(text_all, total_number, completed_today, \
     n_date, text_list_5, daily_production_value_report):
-
+    global list_s_d
     to = total_number[:]
     co = completed_today[:]
     print('completed_today')
@@ -195,31 +188,31 @@ def output_term(text_all, total_number, completed_today, \
     remove_zero(co)
 
     text_all[0].delete('0.0', 'end')
-    text_all[0].insert(END, '路基：挖方' + co[0] + '万方，填方' + co[1] + '万方，\
-    排水工程' + keep_two(co[2]) + '方，防护工程' + keep_two(co[3]) + '方。\n\n\
-    桥梁：桩基' + co[4] + '根，墩柱' + co[5] + '根，盖梁及台帽' + str(int(co[6]) + int(co[7])) + '个，\
-    现浇箱梁0跨。\n\n\隧道：开挖及初支' + co[8] + '米，仰拱' + co[9] + '米，\
-    二衬' + co[10] + '米，排水沟0米，电缆沟0米，路面0米。')
+    text_all[0].insert(END,'路基：挖方' + co[0] + '万方，填方' + co[1] + '万方，\
+排水工程' + keep_two(co[2]) + '方，防护工程' + keep_two(co[3]) + '方。\n\n\
+桥梁：桩基' + co[4] + '根，墩柱' + co[5] + '根，盖梁及台帽' + str(int(co[6]) + int(co[7])) + '个，\
+现浇箱梁0跨。\n\n隧道：开挖及初支' + co[8] + '米，仰拱' + co[9] + '米，\
+二衬' + co[10] + '米，排水沟0米，电缆沟0米，路面0米。')
 
     text_all[1].delete('0.0', 'end')
-    text_all[1].insert(END, '路基：挖方' + to[0] + '万方，填方' + to[1] + '万方，排水工程' \
-    + keep_two(to[2]) + '方，防护工程' + keep_two(to[3]) + '方。\n\n\
-    桥梁：桩基' + to[4] + '根，墩柱' + to[5] + '根，盖梁及台帽' \
-    + str(int(to[6]) + int(to[7])) + '个,现浇箱梁7跨。\n\n\
-    隧道：开挖及初支' + to[8] + '米，仰拱' + to[9] + '米，二衬' + to[10] + '米，\
-    排水沟0米，电缆沟1781米，路面0米。')
+    text_all[1].insert(END, '路基：挖方' + to[0] + '万方，填方' + to[1] + '万方，排水工程'
++ keep_two(to[2]) + '方，防护工程' + keep_two(to[3]) + '方。\n\n\
+桥梁：桩基' + to[4] + '根，墩柱' + to[5] + '根，盖梁及台帽'
++ str(int(to[6]) + int(to[7])) + '个,现浇箱梁9跨。\n\n\
+隧道：开挖及初支' + to[8] + '米，仰拱' + to[9] + '米，二衬' + to[10] + '米，\
+排水沟'+str(list_s_d[2])+'米，电缆沟'+str(list_s_d[0])+'米，路面'+str(list_s_d[1])+'米。')
 
     text_all[2].delete('0.0', 'end')
-    text_all[2].insert(END, '1#梁厂：累计完成25米T梁预制' + \
-    str(dpvr[2]) + '片，40米T梁预制' + str(dpvr[3]) + '片。\n\n' + text_list_5[0] + '\n\n\
-    2#梁厂: 累计完成25米T梁预制' + str(dpvr[4]) + '片，40米T梁预制' + str(dpvr[5]) + '片。\
-    累计完成C20砼面板浇筑' + str(dpvr[6]) + '平方。\n\n' + text_list_5[1])
+    text_all[2].insert(END, '1#梁厂：累计完成25米T梁预制' +
+str(dpvr[2]) + '片，40米T梁预制' + str(dpvr[3]) + '片。\n\n' + text_list_5[0] + '\n\n\
+2#梁厂: 累计完成25米T梁预制' + str(dpvr[4]) + '片，40米T梁预制' + str(dpvr[5]) + '片。\
+累计完成C20砼面板浇筑' + str(dpvr[6]) + '平方。\n\n' + text_list_5[1])
 
     text_all[3].delete('0.0', 'end')
     text_all[3].insert(END, dpvr[0])
 
     text_all[4].delete('0.0', 'end')
-    text_all[4].insert(END, '进度报表日期：' + str(n_date) + \
+    text_all[4].insert(END, '进度报表日期：' + str(n_date) +
     '\t\t\t\t19标今日完成产值：' + str(dpvr[1]) + '万元\n\n')
 
 
