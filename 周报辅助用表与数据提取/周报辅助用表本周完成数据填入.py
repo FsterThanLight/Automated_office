@@ -66,32 +66,34 @@ def extract_data(s_date,e_date,unit,length,project):
         where 完成日期>=#"+s_date+"# and 完成日期<=#"+e_date+"# and \
         完成单位='"+unit+"';")
     amount=cursor.fetchall()[0][0]
+    if amount is None:
+        amount=0
     return amount
     
 
-beam_1_25=extract_data(s_date,e_date,'1#智慧梁厂','25m','梁片预制')
-beam_1_40=extract_data(s_date,e_date,'1#智慧梁厂','40m','梁片预制')
+beam_1_25=int(extract_data(s_date,e_date,'1#智慧梁厂','25m','梁片预制'))+int(extract_data(s_date,e_date,'12标','25m','梁片预制'))
+beam_1_40=int(extract_data(s_date,e_date,'1#智慧梁厂','40m','梁片预制'))+int(extract_data(s_date,e_date,'12标','40m','梁片预制'))
 beam_2_25=extract_data(s_date,e_date,'2#智慧梁厂','25m','梁片预制')
 beam_2_40=extract_data(s_date,e_date,'2#智慧梁厂','40m','梁片预制')
 
-ins_1_25=extract_data(s_date,e_date,'1#智慧梁厂','25m','梁片安装')
-ins_1_40=extract_data(s_date,e_date,'1#智慧梁厂','40m','梁片安装')
+ins_1_25=int(extract_data(s_date,e_date,'1#智慧梁厂','25m','梁片安装'))+int(extract_data(s_date,e_date,'12标','25m','梁片安装'))
+ins_1_40=int(extract_data(s_date,e_date,'1#智慧梁厂','40m','梁片安装'))+int(extract_data(s_date,e_date,'12标','40m','梁片安装'))
 ins_2_25=extract_data(s_date,e_date,'2#智慧梁厂','25m','梁片安装')
 ins_2_40=extract_data(s_date,e_date,'2#智慧梁厂','40m','梁片安装')
 
-wet_1=extract_data(s_date,e_date,'1#智慧梁厂','0','湿接缝长度')
+wet_1=float(extract_data(s_date,e_date,'1#智慧梁厂','0','湿接缝长度'))+float(extract_data(s_date,e_date,'12标','0','湿接缝长度'))
 wet_2=extract_data(s_date,e_date,'2#智慧梁厂','0','湿接缝长度')
-wet_1_n=extract_data(s_date,e_date,'1#智慧梁厂','0','湿接缝跨数')
+wet_1_n=int(extract_data(s_date,e_date,'1#智慧梁厂','0','湿接缝跨数'))+int(extract_data(s_date,e_date,'12标','0','湿接缝跨数'))
 wet_2_n=extract_data(s_date,e_date,'2#智慧梁厂','0','湿接缝跨数')
 
-crash_1=extract_data(s_date,e_date,'1#智慧梁厂','0','防撞护栏长度')
+crash_1=float(extract_data(s_date,e_date,'1#智慧梁厂','0','防撞护栏长度'))+float(extract_data(s_date,e_date,'12标','0','防撞护栏长度'))
 crash_2=extract_data(s_date,e_date,'2#智慧梁厂','0','防撞护栏长度')
-crash_1_n=extract_data(s_date,e_date,'1#智慧梁厂','0','防撞护栏联数')
+crash_1_n=int(extract_data(s_date,e_date,'1#智慧梁厂','0','防撞护栏联数'))+int(extract_data(s_date,e_date,'12标','0','防撞护栏联数'))
 crash_2_n=extract_data(s_date,e_date,'2#智慧梁厂','0','防撞护栏联数')
 
-pave_1=extract_data(s_date,e_date,'1#智慧梁厂','0','桥面铺装面积')
+pave_1=float(extract_data(s_date,e_date,'1#智慧梁厂','0','桥面铺装面积'))+float(extract_data(s_date,e_date,'12标','0','桥面铺装面积'))
 pave_2=extract_data(s_date,e_date,'2#智慧梁厂','0','桥面铺装面积')
-pave_1_n=extract_data(s_date,e_date,'1#智慧梁厂','0','桥面铺装联数')
+pave_1_n=int(extract_data(s_date,e_date,'1#智慧梁厂','0','桥面铺装联数'))+int(extract_data(s_date,e_date,'12标','0','桥面铺装联数'))
 pave_2_n=extract_data(s_date,e_date,'2#智慧梁厂','0','桥面铺装联数')
 
 sht_1['b5'].value=beam_1_25
@@ -119,71 +121,71 @@ sht_1['k5'].value=pave_1_n
 sht_1['j7'].value=pave_2
 sht_1['k7'].value=pave_2_n
 
-sht_1['b12'].value=extract_data('2021/1/1',e_date,'1#智慧梁厂','25m','梁片预制')
-sht_1['c12'].value=extract_data('2021/1/1',e_date,'1#智慧梁厂','40m','梁片预制')
+sht_1['b12'].value=int(extract_data('2021/1/1',e_date,'1#智慧梁厂','25m','梁片预制'))+int(extract_data('2021/1/1',e_date,'12标','25m','梁片预制'))
+sht_1['c12'].value=int(extract_data('2021/1/1',e_date,'1#智慧梁厂','40m','梁片预制'))+int(extract_data('2021/1/1',e_date,'12标','40m','梁片预制'))
 sht_1['b13'].value=extract_data('2021/1/1',e_date,'2#智慧梁厂','25m','梁片预制')
 sht_1['c13'].value=extract_data('2021/1/1',e_date,'2#智慧梁厂','40m','梁片预制')
 
-sht_1['d12'].value=extract_data('2021/1/1',e_date,'1#智慧梁厂','25m','梁片安装')
-sht_1['e12'].value=extract_data('2021/1/1',e_date,'1#智慧梁厂','40m','梁片安装')
+sht_1['d12'].value=int(extract_data('2021/1/1',e_date,'1#智慧梁厂','25m','梁片安装'))+int(extract_data('2021/1/1',e_date,'12标','25m','梁片安装'))
+sht_1['e12'].value=int(extract_data('2021/1/1',e_date,'1#智慧梁厂','40m','梁片安装'))+int(extract_data('2021/1/1',e_date,'12标','40m','梁片安装'))
 sht_1['d13'].value=extract_data('2021/1/1',e_date,'2#智慧梁厂','25m','梁片安装')
 sht_1['e13'].value=extract_data('2021/1/1',e_date,'2#智慧梁厂','40m','梁片安装')
 
-sht_1['f12'].value=extract_data('2021/1/1',e_date,'1#智慧梁厂','0','湿接缝长度')
-sht_1['g12'].value=extract_data('2021/1/1',e_date,'1#智慧梁厂','0','湿接缝跨数')
+sht_1['f12'].value=float(extract_data('2021/1/1',e_date,'1#智慧梁厂','0','湿接缝长度'))+float(extract_data('2021/1/1',e_date,'12标','0','湿接缝长度'))
+sht_1['g12'].value=int(extract_data('2021/1/1',e_date,'1#智慧梁厂','0','湿接缝跨数'))+int(extract_data('2021/1/1',e_date,'12标','0','湿接缝跨数'))
 sht_1['f13'].value=extract_data('2021/1/1',e_date,'2#智慧梁厂','0','湿接缝长度')
 sht_1['g13'].value=extract_data('2021/1/1',e_date,'2#智慧梁厂','0','湿接缝跨数')
 
-sht_1['h12'].value=extract_data('2021/1/1',e_date,'1#智慧梁厂','0','防撞护栏长度')
-sht_1['i12'].value=extract_data('2021/1/1',e_date,'1#智慧梁厂','0','防撞护栏联数')
+sht_1['h12'].value=float(extract_data('2021/1/1',e_date,'1#智慧梁厂','0','防撞护栏长度'))+float(extract_data('2021/1/1',e_date,'12标','0','防撞护栏长度'))
+sht_1['i12'].value=int(extract_data('2021/1/1',e_date,'1#智慧梁厂','0','防撞护栏联数'))+int(extract_data('2021/1/1',e_date,'12标','0','防撞护栏联数'))
 sht_1['h13'].value=extract_data('2021/1/1',e_date,'2#智慧梁厂','0','防撞护栏长度')
 sht_1['i13'].value=extract_data('2021/1/1',e_date,'2#智慧梁厂','0','防撞护栏联数')
 
-sht_1['j12'].value=extract_data('2021/1/1',e_date,'1#智慧梁厂','0','桥面铺装面积')
-sht_1['k12'].value=extract_data('2021/1/1',e_date,'1#智慧梁厂','0','桥面铺装联数')
+sht_1['j12'].value=float(extract_data('2021/1/1',e_date,'1#智慧梁厂','0','桥面铺装面积'))+float(extract_data('2021/1/1',e_date,'12标','0','桥面铺装面积'))
+sht_1['k12'].value=int(extract_data('2021/1/1',e_date,'1#智慧梁厂','0','桥面铺装联数'))+int(extract_data('2021/1/1',e_date,'12标','0','桥面铺装联数'))
 sht_1['j13'].value=extract_data('2021/1/1',e_date,'2#智慧梁厂','0','桥面铺装面积')
 sht_1['k13'].value=extract_data('2021/1/1',e_date,'2#智慧梁厂','0','桥面铺装联数')
 
-b_beam_1_25=extract_data('2022/1/1',e_date,'1#智慧梁厂','25m','梁片预制')
-b_beam_1_40=extract_data('2022/1/1',e_date,'1#智慧梁厂','40m','梁片预制')
+b_beam_1_25=int(extract_data('2022/1/1',e_date,'1#智慧梁厂','25m','梁片预制'))+int(extract_data('2022/1/1',e_date,'12标','25m','梁片预制'))
+b_beam_1_40=int(extract_data('2022/1/1',e_date,'1#智慧梁厂','40m','梁片预制'))+int(extract_data('2022/1/1',e_date,'12标','40m','梁片预制'))
 b_beam_2_25=extract_data('2022/1/1',e_date,'2#智慧梁厂','25m','梁片预制')
 b_beam_2_40=extract_data('2022/1/1',e_date,'2#智慧梁厂','40m','梁片预制')
 sht_1['b14'].value=b_beam_1_25+b_beam_1_40+b_beam_2_25+b_beam_2_40
 
-b_ins_1_25=extract_data('2022/1/1',e_date,'1#智慧梁厂','25m','梁片安装')
-b_ins_1_40=extract_data('2022/1/1',e_date,'1#智慧梁厂','40m','梁片安装')
+b_ins_1_25=int(extract_data('2022/1/1',e_date,'1#智慧梁厂','25m','梁片安装'))+int(extract_data('2022/1/1',e_date,'12标','25m','梁片安装'))
+b_ins_1_40=int(extract_data('2022/1/1',e_date,'1#智慧梁厂','40m','梁片安装'))+int(extract_data('2022/1/1',e_date,'12标','40m','梁片安装'))
 b_ins_2_25=extract_data('2022/1/1',e_date,'2#智慧梁厂','25m','梁片安装')
 b_ins_2_40=extract_data('2022/1/1',e_date,'2#智慧梁厂','40m','梁片安装')
 sht_1['d14'].value=b_ins_1_25+b_ins_1_40+b_ins_2_25+b_ins_2_40
 
-b_beam_1_25=extract_data('2021/12/16',e_date,'1#智慧梁厂','25m','梁片预制')
-b_beam_1_40=extract_data('2021/12/16',e_date,'1#智慧梁厂','40m','梁片预制')
+b_beam_1_25=int(extract_data('2021/12/16',e_date,'1#智慧梁厂','25m','梁片预制'))+int(extract_data('2021/12/16',e_date,'12标','25m','梁片预制'))
+b_beam_1_40=int(extract_data('2021/12/16',e_date,'1#智慧梁厂','40m','梁片预制'))+int(extract_data('2021/12/16',e_date,'12标','40m','梁片预制'))
 b_beam_2_25=extract_data('2021/12/16',e_date,'2#智慧梁厂','25m','梁片预制')
 b_beam_2_40=extract_data('2021/12/16',e_date,'2#智慧梁厂','40m','梁片预制')
 sht_1['b15'].value=b_beam_1_25+b_beam_1_40+b_beam_2_25+b_beam_2_40
 
-b_ins_1_25=extract_data('2021/12/16',e_date,'1#智慧梁厂','25m','梁片安装')
-b_ins_1_40=extract_data('2021/12/16',e_date,'1#智慧梁厂','40m','梁片安装')
+b_ins_1_25=int(extract_data('2021/12/16',e_date,'1#智慧梁厂','25m','梁片安装'))+int(extract_data('2021/12/16',e_date,'12标','25m','梁片安装'))
+b_ins_1_40=int(extract_data('2021/12/16',e_date,'1#智慧梁厂','40m','梁片安装'))+int(extract_data('2021/12/16',e_date,'12标','40m','梁片安装'))
 b_ins_2_25=extract_data('2021/12/16',e_date,'2#智慧梁厂','25m','梁片安装')
 b_ins_2_40=extract_data('2021/12/16',e_date,'2#智慧梁厂','40m','梁片安装')
 sht_1['d15'].value=b_ins_1_25+b_ins_1_40+b_ins_2_25+b_ins_2_40
 
-s1=extract_data('2022/1/1',e_date,'1#智慧梁厂','0','湿接缝长度')
-s2=extract_data('2022/1/1',e_date,'1#智慧梁厂','0','湿接缝跨数')
+s1=float(extract_data('2022/1/1',e_date,'1#智慧梁厂','0','湿接缝长度'))+float(extract_data('2022/1/1',e_date,'12标','0','湿接缝长度'))
+s2=float(extract_data('2022/1/1',e_date,'1#智慧梁厂','0','湿接缝跨数'))+float(extract_data('2022/1/1',e_date,'12标','0','湿接缝跨数'))
 s3=extract_data('2022/1/1',e_date,'2#智慧梁厂','0','湿接缝长度')
 s4=extract_data('2022/1/1',e_date,'2#智慧梁厂','0','湿接缝跨数')
 sht_1['f14'].value=s1+s3
 sht_1['g14'].value=s2+s4
 
-f1=extract_data('2022/1/1',e_date,'1#智慧梁厂','0','防撞护栏长度')
-f2=extract_data('2022/1/1',e_date,'1#智慧梁厂','0','防撞护栏联数')
+f1=float(extract_data('2022/1/1',e_date,'1#智慧梁厂','0','防撞护栏长度'))+float(extract_data('2022/1/1',e_date,'12标','0','防撞护栏长度'))
+f2=float(extract_data('2022/1/1',e_date,'1#智慧梁厂','0','防撞护栏联数'))+float(extract_data('2022/1/1',e_date,'12标','0','防撞护栏联数'))
 f3=extract_data('2022/1/1',e_date,'2#智慧梁厂','0','防撞护栏长度')
 f4=extract_data('2022/1/1',e_date,'2#智慧梁厂','0','防撞护栏联数')
 sht_1['h14'].value=f1+f3
 sht_1['i14'].value=f2+f4
 
-q1=extract_data('2022/1/1',e_date,'1#智慧梁厂','0','桥面铺装面积')
-q2=extract_data('2022/1/1',e_date,'1#智慧梁厂','0','桥面铺装联数')
+q1=float(extract_data('2022/1/1',e_date,'1#智慧梁厂','0','桥面铺装面积'))+float(extract_data('2022/1/1',e_date,'12标','0','桥面铺装面积'))
+q2=int(extract_data('2022/1/1',e_date,'1#智慧梁厂','0','桥面铺装联数'))+int(extract_data('2022/1/1',e_date,'12标','0','桥面铺装联数'))
 q3=extract_data('2022/1/1',e_date,'2#智慧梁厂','0','桥面铺装面积')
 q4=extract_data('2022/1/1',e_date,'2#智慧梁厂','0','桥面铺装联数')
 try:
@@ -193,22 +195,22 @@ except TypeError:
     sht_1['j14'].value=0
     sht_1['k14'].value=0
 
-ss1=extract_data('2021/12/16',e_date,'1#智慧梁厂','0','湿接缝长度')
-ss2=extract_data('2021/12/16',e_date,'1#智慧梁厂','0','湿接缝跨数')
+ss1=float(extract_data('2021/12/16',e_date,'1#智慧梁厂','0','湿接缝长度'))+float(extract_data('2021/12/16',e_date,'12标','0','湿接缝长度'))
+ss2=int(extract_data('2021/12/16',e_date,'1#智慧梁厂','0','湿接缝跨数'))+int(extract_data('2021/12/16',e_date,'12标','0','湿接缝跨数'))
 ss3=extract_data('2021/12/16',e_date,'2#智慧梁厂','0','湿接缝长度')
 ss4=extract_data('2021/12/16',e_date,'2#智慧梁厂','0','湿接缝跨数')
 sht_1['f15'].value=ss1+ss3
 sht_1['g15'].value=ss2+ss4
 
-ff1=extract_data('2021/12/16',e_date,'1#智慧梁厂','0','防撞护栏长度')
-ff2=extract_data('2021/12/16',e_date,'1#智慧梁厂','0','防撞护栏联数')
+ff1=float(extract_data('2021/12/16',e_date,'1#智慧梁厂','0','防撞护栏长度'))+float(extract_data('2021/12/16',e_date,'12标','0','防撞护栏长度'))
+ff2=int(extract_data('2021/12/16',e_date,'1#智慧梁厂','0','防撞护栏联数'))+int(extract_data('2021/12/16',e_date,'12标','0','防撞护栏联数'))
 ff3=extract_data('2021/12/16',e_date,'2#智慧梁厂','0','防撞护栏长度')
 ff4=extract_data('2021/12/16',e_date,'2#智慧梁厂','0','防撞护栏联数')
 sht_1['h15'].value=ff1+ff3
 sht_1['i15'].value=ff2+ff4
 
-qq1=extract_data('2021/12/16',e_date,'1#智慧梁厂','0','桥面铺装面积')
-qq2=extract_data('2021/12/16',e_date,'1#智慧梁厂','0','桥面铺装联数')
+qq1=float(extract_data('2021/12/16',e_date,'1#智慧梁厂','0','桥面铺装面积'))+float(extract_data('2021/12/16',e_date,'12标','0','桥面铺装面积'))
+qq2=int(extract_data('2021/12/16',e_date,'1#智慧梁厂','0','桥面铺装联数'))+int(extract_data('2021/12/16',e_date,'12标','0','桥面铺装联数'))
 qq3=extract_data('2021/12/16',e_date,'2#智慧梁厂','0','桥面铺装面积')
 qq4=extract_data('2021/12/16',e_date,'2#智慧梁厂','0','桥面铺装联数')
 try:
