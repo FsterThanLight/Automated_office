@@ -123,6 +123,28 @@ def extract_data(s_date, e_date, unit, length, project, cursor):
     return amount
 
 
+def error_output(cursor, sht_2):
+    """计算产值误差"""
+    # 计算数据库中的总产值
+    cursor.excute('select round(sum(总产值)/10000,2) from 所有已浇筑梁片信息')
+    beam_value = cursor.fetchall()[0][0]
+    cursor.excute('select sum(安装产值) from 所有已浇筑梁片信息')
+    ins_value = cursor.fetchall()[0][0]
+    cursor.excute('select round(sum(产值)/10000,2) FROM 已完成湿接缝查询')
+    wet_value = cursor.fetchall()[0][0]
+    cursor.excute('SELECT round(sum(价格（元）)/10000,2) FROM 已完成防撞护栏查询')
+    guardrail_value = cursor.fetchall()[0][0]
+    cursor.excute('SELECT round(sum(价格（元）)/10000,2) FROM 已完成桥面铺装查询')
+    shop_value = cursor.fetchall()[0][0]
+    total_value = beam_value + ins_value + wet_value + guardrail_value + shop_value
+
+    # 获取表中的400章总产值
+    total_table_value = sht_2.range('d2').value
+    # 计算差值
+    error_value = total_table_value - total_value
+    return error_value
+
+
 def main(sy):
     global cursor, date, sht_2, wb_1
     date = 'xx'
@@ -268,19 +290,26 @@ def main_2(cursor, sht_2, date, sy):
     order_1 = sht_2.range('h37:p37').value
     order_2 = sht_2.range('h39:p39').value
     # print(order_1)
-    sht_2.range(order_1[0]).value = int(extract_data('2020/1/1', new_date, '1#智慧梁厂', '25m', '梁片预制数量', cursor))+int(extract_data('2020/1/1', new_date, '12标', '25m', '梁片预制数量', cursor))
-    sht_2.range(order_1[1]).value = int(extract_data('2020/1/1', new_date, '1#智慧梁厂', '40m', '梁片预制数量', cursor))+int(extract_data('2020/1/1', new_date, '12标', '40m', '梁片预制数量', cursor))
+    sht_2.range(order_1[0]).value = int(extract_data('2020/1/1', new_date, '1#智慧梁厂', '25m', '梁片预制数量', cursor)) + int(
+        extract_data('2020/1/1', new_date, '12标', '25m', '梁片预制数量', cursor))
+    sht_2.range(order_1[1]).value = int(extract_data('2020/1/1', new_date, '1#智慧梁厂', '40m', '梁片预制数量', cursor)) + int(
+        extract_data('2020/1/1', new_date, '12标', '40m', '梁片预制数量', cursor))
     sht_2.range(order_1[2]).value = extract_data('2020/1/1', new_date, '2#智慧梁厂', '25m', '梁片预制数量', cursor)
     sht_2.range(order_1[3]).value = extract_data('2020/1/1', new_date, '2#智慧梁厂', '40m', '梁片预制数量', cursor)
 
-    sht_2.range(order_1[4]).value = int(extract_data('2020/1/1', new_date, '1#智慧梁厂', '25m', '梁片安装数量', cursor))+int(extract_data('2020/1/1', new_date, '12标', '25m', '梁片安装数量', cursor))
-    sht_2.range(order_1[5]).value = int(extract_data('2020/1/1', new_date, '1#智慧梁厂', '40m', '梁片安装数量', cursor))+int(extract_data('2020/1/1', new_date, '12标', '40m', '梁片安装数量', cursor))
+    sht_2.range(order_1[4]).value = int(extract_data('2020/1/1', new_date, '1#智慧梁厂', '25m', '梁片安装数量', cursor)) + int(
+        extract_data('2020/1/1', new_date, '12标', '25m', '梁片安装数量', cursor))
+    sht_2.range(order_1[5]).value = int(extract_data('2020/1/1', new_date, '1#智慧梁厂', '40m', '梁片安装数量', cursor)) + int(
+        extract_data('2020/1/1', new_date, '12标', '40m', '梁片安装数量', cursor))
     sht_2.range(order_1[6]).value = extract_data('2020/1/1', new_date, '2#智慧梁厂', '25m', '梁片安装数量', cursor)
     sht_2.range(order_1[7]).value = extract_data('2020/1/1', new_date, '2#智慧梁厂', '40m', '梁片安装数量', cursor)
     sy.progressBar.setValue(40)
-    sht_2.range(order_2[0]).value = float(extract_data('2020/1/1', new_date, '1#智慧梁厂', '0', '湿接缝长度', cursor))+float(extract_data('2020/1/1', new_date, '12标', '0', '湿接缝长度', cursor))
-    sht_2.range(order_2[1]).value = float(extract_data('2020/1/1', new_date, '1#智慧梁厂', '0', '桥面铺装面积', cursor))+float(extract_data('2020/1/1', new_date, '12标', '0', '桥面铺装面积', cursor))
-    sht_2.range(order_2[2]).value = float(extract_data('2020/1/1', new_date, '1#智慧梁厂', '0', '防撞护栏长度', cursor))+float(extract_data('2020/1/1', new_date, '12标', '0', '防撞护栏长度', cursor))
+    sht_2.range(order_2[0]).value = float(extract_data('2020/1/1', new_date, '1#智慧梁厂', '0', '湿接缝长度', cursor)) + float(
+        extract_data('2020/1/1', new_date, '12标', '0', '湿接缝长度', cursor))
+    sht_2.range(order_2[1]).value = float(extract_data('2020/1/1', new_date, '1#智慧梁厂', '0', '桥面铺装面积', cursor)) + float(
+        extract_data('2020/1/1', new_date, '12标', '0', '桥面铺装面积', cursor))
+    sht_2.range(order_2[2]).value = float(extract_data('2020/1/1', new_date, '1#智慧梁厂', '0', '防撞护栏长度', cursor)) + float(
+        extract_data('2020/1/1', new_date, '12标', '0', '防撞护栏长度', cursor))
 
     sht_2.range(order_2[3]).value = extract_data('2020/1/1', new_date, '2#智慧梁厂', '0', '湿接缝长度', cursor)
     sht_2.range(order_2[4]).value = extract_data('2020/1/1', new_date, '2#智慧梁厂', '0', '桥面铺装面积', cursor)
@@ -298,6 +327,8 @@ def main_2(cursor, sht_2, date, sy):
     # print('图片已生成。')
     sy.state.setText('图片已生成。')
     sy.progressBar.setValue(80)
+    # 返回差值
+    erroe_value = str(error_output(cursor, sht_2))
     wb_1.save()
     wb_1.close()
     sy.state.setText('工作簿已保存并关闭。')
@@ -309,7 +340,7 @@ def main_2(cursor, sht_2, date, sy):
     sy.state.setText('日报已更新,请查收。')
     sy.progressBar.setValue(100)
     # x=input('日报已更新,请查收。')
-    QMessageBox.about(sy, '提示', '日报已更新,请查收。')
+    QMessageBox.about(sy, '提示', '日报已更新,请查收。\n'+'产值误差：'+erroe_value)
     sy.button2.setEnabled(False)
 
 
