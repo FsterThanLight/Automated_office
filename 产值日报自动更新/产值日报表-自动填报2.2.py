@@ -126,22 +126,22 @@ def extract_data(s_date, e_date, unit, length, project, cursor):
 def error_output(cursor, sht_2):
     """计算产值误差"""
     # 计算数据库中的总产值
-    cursor.excute('select round(sum(总产值)/10000,2) from 所有已浇筑梁片信息')
+    cursor.execute('select round(sum(总产值)/10000,2) from 所有已浇筑梁片信息')
     beam_value = cursor.fetchall()[0][0]
-    cursor.excute('select sum(安装产值) from 所有已浇筑梁片信息')
+    cursor.execute('select sum(安装产值) from 所有已浇筑梁片信息')
     ins_value = cursor.fetchall()[0][0]
-    cursor.excute('select round(sum(产值)/10000,2) FROM 已完成湿接缝查询')
+    cursor.execute('select round(sum(产值)/10000,2) FROM 已完成湿接缝查询')
     wet_value = cursor.fetchall()[0][0]
-    cursor.excute('SELECT round(sum(价格（元）)/10000,2) FROM 已完成防撞护栏查询')
+    cursor.execute('SELECT round(sum(价格（元）)/10000,2) FROM 已完成防撞护栏查询')
     guardrail_value = cursor.fetchall()[0][0]
-    cursor.excute('SELECT round(sum(价格（元）)/10000,2) FROM 已完成桥面铺装查询')
+    cursor.execute('SELECT round(sum(价格（元）)/10000,2) FROM 已完成桥面铺装查询')
     shop_value = cursor.fetchall()[0][0]
     total_value = beam_value + ins_value + wet_value + guardrail_value + shop_value
 
     # 获取表中的400章总产值
-    total_table_value = sht_2.range('d2').value
+    total_table_value = float(sht_2.range('d7').value)
     # 计算差值
-    error_value = total_table_value - total_value
+    error_value = round(total_table_value - total_value,4)
     return error_value
 
 
@@ -231,8 +231,8 @@ def main(sy):
     sy.button1.setEnabled(False)
 
 
-def main_2(cursor, sht_2, date, sy):
-    global wb_1, excel_app
+def main_2(sht_2, date, sy):
+    global wb_1, excel_app,cursor
     sy.progressBar.setValue(10)
     sy.button1.setEnabled(False)
     print(date)
@@ -328,6 +328,8 @@ def main_2(cursor, sht_2, date, sy):
     sy.state.setText('图片已生成。')
     sy.progressBar.setValue(80)
     # 返回差值
+    # path = sht_2.range('i40').value.replace('"', '')
+    # cursor=accdb(path)
     erroe_value = str(error_output(cursor, sht_2))
     wb_1.save()
     wb_1.close()
@@ -405,6 +407,6 @@ if __name__ == '__main__':
     sy.state.setText('请点击打开日报表。')
     sy.actionDaily_report.triggered.connect(lambda: open_file(sy))
     sy.button1.clicked.connect(lambda: main(sy))
-    sy.button2.clicked.connect(lambda: main_2(cursor, sht_2, date, sy))
+    sy.button2.clicked.connect(lambda: main_2(sht_2, date, sy))
     sy.button3.clicked.connect(lambda: main_3(date, sy))
     sys.exit(app.exec_())
