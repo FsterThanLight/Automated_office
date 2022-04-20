@@ -387,11 +387,14 @@ def main_3(date, sy):
         list_number = []
         for i in range(len(list_ins)):
             '''返回目标安装编号行号，根据行号更新数据'''
-            x = list_order_ins.index(list_ins[i][0]) + 1
-            list_number.append(x)
-            y = list_ins[i][1].strftime('%Y/%#m/%#d')
-            sht_target.cell(row=x, column=ord(list_location[9]) - 64, value=y).alignment = alignment_center
-            sht_target.cell(row=x, column=ord(list_location[10]) - 64, value=list_ins[i][2])
+            try:
+                x = list_order_ins.index(list_ins[i][0]) + 1
+                list_number.append(x)
+                y = list_ins[i][1].strftime('%Y/%#m/%#d')
+                sht_target.cell(row=x, column=ord(list_location[9]) - 64, value=y).alignment = alignment_center
+                sht_target.cell(row=x, column=ord(list_location[10]) - 64, value=list_ins[i][2])
+            except ValueError:
+                QMessageBox.about(sy, '提示', 'excel台账中未查找到数据库中安装梁片！')
         wb_2.save('浇筑安装台账.xlsx')
         QMessageBox.about(sy, '提示', '浇筑安装台账已更新,请查收。')
 
