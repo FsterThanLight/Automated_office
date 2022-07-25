@@ -2,6 +2,7 @@ import xlwings as xw
 import pypyodbc
 import datetime
 
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialog
 from PyQt5.QtCore import QDate
 from functions import *
@@ -141,7 +142,7 @@ def error_output(cursor, sht_2):
     # 获取表中的400章总产值
     total_table_value = float(sht_2.range('d7').value)
     # 计算差值
-    error_value = round(total_table_value - total_value,4)
+    error_value = round(total_table_value - total_value, 4)
     return error_value
 
 
@@ -232,23 +233,28 @@ def main(sy):
 
 
 def main_2(sht_2, date, sy):
-    global wb_1, excel_app,cursor
+    global wb_1, excel_app, cursor
     sy.progressBar.setValue(10)
     sy.button1.setEnabled(False)
     print(date)
     new_date = date.replace('.', '/')
     sy.progressBar.setValue(20)
     # 填写梁片今日数量
-    sht_2.range('c11').value = int(float(extract_data(new_date, new_date, '1#智慧梁厂', '25m', '梁片预制数量', cursor)) + float(
-        extract_data(new_date, new_date, '12标', '25m', '梁片预制数量', cursor)))
-    sht_2.range('c12').value = int(float(extract_data(new_date, new_date, '1#智慧梁厂', '40m', '梁片预制数量', cursor)) + float(
-        extract_data(new_date, new_date, '12标', '40m', '梁片预制数量', cursor)))
+    sht_2.range('c11').value = int(float(extract_data(new_date, new_date, '1#智慧梁厂', '25m', '梁片预制数量', cursor)))
+    sht_2.range('b11').value = int(float(extract_data(new_date, new_date, '12标', '25m', '梁片预制数量', cursor)))
+
+    sht_2.range('c12').value = int(float(extract_data(new_date, new_date, '1#智慧梁厂', '40m', '梁片预制数量', cursor)))
+    sht_2.range('b12').value = int(float(extract_data(new_date, new_date, '12标', '40m', '梁片预制数量', cursor)))
+
     sht_2.range('e11').value = extract_data(new_date, new_date, '2#智慧梁厂', '25m', '梁片预制数量', cursor)
     sht_2.range('e12').value = extract_data(new_date, new_date, '2#智慧梁厂', '40m', '梁片预制数量', cursor)
-    sht_2.range('c13').value = int(float(extract_data(new_date, new_date, '1#智慧梁厂', '25m', '梁片安装数量', cursor)) + float(
-        extract_data(new_date, new_date, '12标', '25m', '梁片安装数量', cursor)))
-    sht_2.range('c14').value = int(float(extract_data(new_date, new_date, '1#智慧梁厂', '40m', '梁片安装数量', cursor)) + float(
-        extract_data(new_date, new_date, '12标', '40m', '梁片安装数量', cursor)))
+
+    sht_2.range('c13').value = int(float(extract_data(new_date, new_date, '1#智慧梁厂', '25m', '梁片安装数量', cursor)))
+    sht_2.range('b13').value = int(float(extract_data(new_date, new_date, '12标', '25m', '梁片安装数量', cursor)))
+
+    sht_2.range('c14').value = int(float(extract_data(new_date, new_date, '1#智慧梁厂', '40m', '梁片安装数量', cursor)))
+    sht_2.range('b14').value = int(float(extract_data(new_date, new_date, '12标', '40m', '梁片安装数量', cursor)))
+
     sht_2.range('e13').value = extract_data(new_date, new_date, '2#智慧梁厂', '25m', '梁片安装数量', cursor)
     sht_2.range('e14').value = extract_data(new_date, new_date, '2#智慧梁厂', '40m', '梁片安装数量', cursor)
     # 梁片产值
@@ -266,12 +272,15 @@ def main_2(sht_2, date, sy):
     sht_2.range('f14').value = extract_data(new_date, new_date, '2#智慧梁厂', '40m', '梁片安装产值', cursor)
     # 桥面系数量
     sy.progressBar.setValue(30)
-    sht_2.range('c15').value = str(float(extract_data(new_date, new_date, '1#智慧梁厂', '0', '湿接缝长度', cursor)) + float(
-        extract_data(new_date, new_date, '12标', '0', '湿接缝长度', cursor)))
-    sht_2.range('c16').value = str(float(extract_data(new_date, new_date, '1#智慧梁厂', '0', '防撞护栏长度', cursor)) + float(
-        extract_data(new_date, new_date, '12标', '0', '防撞护栏长度', cursor)))
-    sht_2.range('c17').value = str(float(extract_data(new_date, new_date, '1#智慧梁厂', '0', '桥面铺装面积', cursor)) + float(
-        extract_data(new_date, new_date, '12标', '0', '桥面铺装面积', cursor)))
+    sht_2.range('c15').value = str(float(extract_data(new_date, new_date, '1#智慧梁厂', '0', '湿接缝长度', cursor)))
+    sht_2.range('b15').value = str(float(extract_data(new_date, new_date, '12标', '0', '湿接缝长度', cursor)))
+
+    sht_2.range('c16').value = str(float(extract_data(new_date, new_date, '1#智慧梁厂', '0', '防撞护栏长度', cursor)))
+    sht_2.range('b16').value = str(float(extract_data(new_date, new_date, '12标', '0', '防撞护栏长度', cursor)))
+
+    sht_2.range('c17').value = str(float(extract_data(new_date, new_date, '1#智慧梁厂', '0', '桥面铺装面积', cursor)))
+    sht_2.range('b17').value = str(float(extract_data(new_date, new_date, '12标', '0', '桥面铺装面积', cursor)))
+
     sht_2.range('e15').value = extract_data(new_date, new_date, '2#智慧梁厂', '0', '湿接缝长度', cursor)
     sht_2.range('e16').value = extract_data(new_date, new_date, '2#智慧梁厂', '0', '防撞护栏长度', cursor)
     sht_2.range('e17').value = extract_data(new_date, new_date, '2#智慧梁厂', '0', '桥面铺装面积', cursor)
@@ -314,6 +323,52 @@ def main_2(sht_2, date, sy):
     sht_2.range(order_2[3]).value = extract_data('2020/1/1', new_date, '2#智慧梁厂', '0', '湿接缝长度', cursor)
     sht_2.range(order_2[4]).value = extract_data('2020/1/1', new_date, '2#智慧梁厂', '0', '桥面铺装面积', cursor)
     sht_2.range(order_2[5]).value = extract_data('2020/1/1', new_date, '2#智慧梁厂', '0', '防撞护栏长度', cursor)
+    # 12标表格数据填入，本日产值列
+    sht_2.range(chr(ord(order_2[6]) + 2) + str(int(order_2[7]) + 2)).value = float(
+        extract_data(new_date, new_date, '12标', '25m', '梁片预制产值', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 2) + str(int(order_2[7]) + 3)).value = float(
+        extract_data(new_date, new_date, '12标', '40m', '梁片预制产值', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 2) + str(int(order_2[7]) + 4)).value = float(
+        extract_data(new_date, new_date, '12标', '25m', '梁片安装产值', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 2) + str(int(order_2[7]) + 5)).value = float(
+        extract_data(new_date, new_date, '12标', '40m', '梁片安装产值', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 2) + str(int(order_2[7]) + 6)).value = float(
+        extract_data(new_date, new_date, '12标', '0', '湿接缝产值', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 2) + str(int(order_2[7]) + 7)).value = float(
+        extract_data(new_date, new_date, '12标', '0', '防撞护栏产值', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 2) + str(int(order_2[7]) + 8)).value = float(
+        extract_data(new_date, new_date, '12标', '0', '桥面铺装产值', cursor))
+    # 12标表格数据填入，累计完成列
+    sht_2.range(chr(ord(order_2[6]) + 3) + str(int(order_2[7]) + 2)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '25m', '梁片预制数量', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 3) + str(int(order_2[7]) + 3)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '40m', '梁片预制数量', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 3) + str(int(order_2[7]) + 4)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '25m', '梁片安装数量', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 3) + str(int(order_2[7]) + 5)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '40m', '梁片安装数量', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 3) + str(int(order_2[7]) + 6)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '0', '湿接缝长度', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 3) + str(int(order_2[7]) + 7)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '0', '防撞护栏长度', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 3) + str(int(order_2[7]) + 8)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '0', '桥面铺装面积', cursor))
+    # 12标表格数据填入，累计完成产值列
+    sht_2.range(chr(ord(order_2[6]) + 4) + str(int(order_2[7]) + 2)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '25m', '梁片预制产值', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 4) + str(int(order_2[7]) + 3)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '40m', '梁片预制产值', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 4) + str(int(order_2[7]) + 4)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '25m', '梁片安装产值', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 4) + str(int(order_2[7]) + 5)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '40m', '梁片安装产值', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 4) + str(int(order_2[7]) + 6)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '0', '湿接缝产值', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 4) + str(int(order_2[7]) + 7)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '0', '防撞护栏产值', cursor))
+    sht_2.range(chr(ord(order_2[6]) + 4) + str(int(order_2[7]) + 8)).value = float(
+        extract_data('2020/1/1', new_date, '12标', '0', '桥面铺装产值', cursor))
+
     sy.state.setText('日报生成中......')
     sy.progressBar.setValue(50)
     # 更新总产值
@@ -342,7 +397,7 @@ def main_2(sht_2, date, sy):
     sy.state.setText('日报已更新,请查收。')
     sy.progressBar.setValue(100)
     # x=input('日报已更新,请查收。')
-    QMessageBox.about(sy, '提示', '日报已更新,请查收。\n'+'产值误差：'+erroe_value)
+    QMessageBox.about(sy, '提示', '日报已更新,请查收。\n' + '产值误差：' + erroe_value)
     sy.button2.setEnabled(False)
 
 
@@ -404,6 +459,7 @@ def main_3(date, sy):
 
 if __name__ == '__main__':
     # 加载主程序窗体
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QApplication([])
     sy = Sy()
     sy.show()

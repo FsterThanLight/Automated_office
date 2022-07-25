@@ -103,7 +103,7 @@ def fill_today(date,sht_2):
     '''更新表中日期'''
     n_date=date.replace('.','/')
     sht_2.range('a3').value=n_date
-    sht_2.range('a11').value=n_date
+    # sht_2.range('a11').value=n_date
 
 def hardening(sht_2):
     '''2#梁厂硬化'''
